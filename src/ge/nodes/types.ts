@@ -63,6 +63,12 @@ export interface RayCastOptions extends NodeOptions {
    */
   autoCheck?: boolean
 }
+export interface TimerOptions extends NodeOptions {
+  /** In milliseconds */
+  duration: number
+  /** @default false */
+  loop?: boolean
+}
 
 // Events
 export interface NodeEvents {
@@ -76,6 +82,9 @@ export interface ColliderEvents extends NodeEvents {
 }
 export interface RayCastEvents extends NodeEvents {
   collision: (collider: Collider) => void
+}
+export interface TimerEvents extends NodeEvents {
+  finished: () => void
 }
 
 // Nodes

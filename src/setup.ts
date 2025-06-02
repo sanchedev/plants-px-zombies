@@ -2,7 +2,7 @@ import Game from './ge/game.js'
 import { Box } from './ge/nodes/box.js'
 import { AssetManager } from './ge/utils/asset.js'
 import { Vector } from './ge/utils/vector.js'
-import { Peashooter } from './go/plants/peashooter.js'
+import { Sunflower } from './go/plants/sunflower.js'
 import './setupAssets/image.js'
 
 export async function setup() {
@@ -26,7 +26,7 @@ export async function setup() {
 
   Game.game.addNodeToLayer(
     'example',
-    new Peashooter({ position: new Vector(10, 10) })
+    new Sunflower({ position: new Vector(10, 10) })
   )
 
   Game.game.start()

@@ -40,6 +40,8 @@ export class Pea extends Projectil {
     this.addChild(sprite)
   }
 
+  damage: number = 20
+
   update(dt: number): void {
     this.position.x += this.speed * TILE_SIZE * dt
 

@@ -1,3 +1,4 @@
+import { PLANT_DETAILS } from '../../details/plants.js'
 import Game from '../../ge/game.js'
 import { Animator } from '../../ge/nodes/animator.js'
 import { Collider } from '../../ge/nodes/collider.js'
@@ -12,7 +13,7 @@ import { Pea } from '../projectiles/pea.js'
 import { Plant } from './plant.js'
 
 export class Peashooter extends Plant {
-  health = 300
+  health = PLANT_DETAILS.peashooter.toughness
 
   constructor(options: NodeOptions) {
     super(options)

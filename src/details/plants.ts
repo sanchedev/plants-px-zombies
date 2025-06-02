@@ -1,0 +1,102 @@
+import { PeaType, PlantDetails, SunSize } from './plantsTypes.js'
+
+export const PLANT_DETAILS: Record<string, PlantDetails> = {
+  peashooter: {
+    name: 'Peashooter',
+    cost: 100,
+    toughness: 300,
+    recharge: 7500,
+    defaultLoaded: false,
+    attack: {
+      type: 'shoot',
+      peaType: PeaType.Pea,
+      fireRate: 1400,
+      maxRange: 9,
+    },
+    sunProduction: null,
+  },
+  sunflower: {
+    name: 'Sunflower',
+    cost: 50,
+    toughness: 300,
+    recharge: 7500,
+    defaultLoaded: true,
+    attack: null,
+    sunProduction: {
+      rate: 24000,
+      size: SunSize.Normal,
+    },
+  },
+  'cherry-bomb': {
+    name: 'Cherry Bomb',
+    cost: 150,
+    toughness: 300,
+    recharge: 50000,
+    defaultLoaded: false,
+    attack: {
+      type: 'explode',
+      range: 3,
+    },
+    sunProduction: null,
+  },
+  'wall-nut': {
+    name: 'Wall-nut',
+    cost: 50,
+    toughness: 4000,
+    recharge: 30000,
+    defaultLoaded: false,
+    attack: null,
+    sunProduction: null,
+  },
+  potatomine: {
+    name: 'Potatomine',
+    cost: 25,
+    toughness: 300,
+    recharge: 30000,
+    defaultLoaded: false,
+    attack: {
+      type: 'explode',
+      range: 1,
+    },
+    sunProduction: null,
+  },
+  snowpea: {
+    name: 'Snow Pea',
+    cost: 175,
+    toughness: 300,
+    recharge: 7500,
+    defaultLoaded: false,
+    attack: {
+      type: 'shoot',
+      peaType: PeaType.Snowpea,
+      fireRate: 1400,
+      maxRange: 9,
+    },
+    sunProduction: null,
+  },
+  chomper: {
+    name: 'Chomper',
+    cost: 150,
+    toughness: 300,
+    recharge: 7500,
+    defaultLoaded: false,
+    attack: {
+      type: 'eat',
+    },
+    sunProduction: null,
+  },
+  repeater: {
+    name: 'Repeater',
+    cost: 200,
+    toughness: 300,
+    recharge: 7500,
+    defaultLoaded: false,
+    attack: {
+      type: 'shoot',
+      peaType: PeaType.Pea,
+      fireRate: 700,
+      maxRange: 9,
+    },
+    sunProduction: null,
+  },
+}
