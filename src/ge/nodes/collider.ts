@@ -18,14 +18,10 @@ export class Collider extends Node {
 
   ev = new EvListener<ColliderEvents>()
 
-  #detection(from1: Vector, to1: Vector, from2: Vector, to2: Vector) {
-    return (
-      from1.x < to2.x && to1.x > from2.x && from1.y < to2.y && to1.y > from2.y
-    )
-  }
+  disabled: boolean = false
 
   checkCollisionTo(collider: Collider): boolean {
-    return this.#detection(
+    return collisionDetector(
       this.globalPosition,
       this.globalPosition.add(this.size),
       collider.globalPosition,
@@ -33,7 +29,11 @@ export class Collider extends Node {
     )
   }
 
+  lastDetectedColliders: Collider[] = []
+
   checkCollision(): Collider[] {
+    if (this.disabled) return []
+
     const colliders: Collider[] = []
 
     const layer = Array.from(Game.game.layers.entries())
@@ -45,6 +45,7 @@ export class Collider extends Node {
         ])
       )
       .flat(2)
+      .filter((collider) => !collider.disabled)
 
     for (const collider of layer) {
       if (this.checkCollisionTo(collider)) {
@@ -57,9 +58,20 @@ export class Collider extends Node {
 
   update(dt: number): void {
     if (this.autoCheck) {
-      this.checkCollision().forEach((collider) => {
-        this.ev._emit_('collision', collider)
+      const colliders = this.checkCollision()
+
+      colliders.forEach((collider) => {
+        if (!this.lastDetectedColliders.includes(collider)) {
+          this.ev._emit_('collision', collider)
+        }
       })
+      this.lastDetectedColliders.forEach((collider) => {
+        if (!colliders.includes(collider)) {
+          this.ev._emit_('exit', collider)
+        }
+      })
+
+      this.lastDetectedColliders = colliders
     }
     super.update(dt)
   }
@@ -86,4 +98,53 @@ export class Collider extends Node {
   destroy(): void {
     super.destroy()
   }
+}
+
+function collisionDetector(
+  from1: Vector,
+  to1: Vector,
+  from2: Vector,
+  to2: Vector
+) {
+  return (
+    from1.x < to2.x &&
+    to1.x > from2.x &&
+    from1.y < to2.y &&
+    to1.y > from2.y /* ||
+    (from2.x < to1.x && to2.x > from1.x && from2.y < to1.y && to2.y > from1.y)*/
+  )
+}
+
+export function checkCollisionInLayer(
+  layer: string,
+  from: Vector,
+  size: Vector
+) {
+  const colliders: Collider[] = []
+
+  const collidersInLayer = Array.from(Game.game.layers.entries())
+    .filter(([key]) => layer.includes(key))
+    .map(([, nodes]) =>
+      nodes.map((node) => [
+        ...(node instanceof Collider ? [node] : []),
+        ...node.findChildrenByType(Collider),
+      ])
+    )
+    .flat(2)
+    .filter((collider) => !collider.disabled)
+
+  for (const collider of collidersInLayer) {
+    if (
+      collisionDetector(
+        from,
+        from.add(size),
+        collider.globalPosition,
+        collider.globalPosition.add(collider.size)
+      )
+    ) {
+      colliders.push(collider)
+    }
+  }
+
+  return colliders
 }

@@ -17,7 +17,7 @@ export class Timer extends Node {
   timer = 0
   #isRunning = false
 
-  start(): void {
+  play(): void {
     this.timer = 0
     this.#isRunning = true
   }
@@ -36,7 +36,7 @@ export class Timer extends Node {
         this.stop()
         this.ev._emit_('finished')
         if (this.loop) {
-          this.start()
+          this.play()
         }
       }
     }

@@ -1,9 +1,11 @@
-import { PeaType, PlantDetails, SunSize } from './plantsTypes.js'
+import { PeaType, SunSize } from './plantsTypes.js'
 
-export const PLANT_DETAILS: Record<string, PlantDetails> = {
+export const PLANT_DETAILS = {
   peashooter: {
-    name: 'Peashooter',
-    cost: 100,
+    tag: 'plants/day',
+    index: 0,
+    countSeeds: 8,
+    cost: 4,
     toughness: 300,
     recharge: 7500,
     defaultLoaded: false,
@@ -16,8 +18,10 @@ export const PLANT_DETAILS: Record<string, PlantDetails> = {
     sunProduction: null,
   },
   sunflower: {
-    name: 'Sunflower',
-    cost: 50,
+    tag: 'plants/day',
+    index: 1,
+    countSeeds: 8,
+    cost: 2,
     toughness: 300,
     recharge: 7500,
     defaultLoaded: true,
@@ -28,8 +32,10 @@ export const PLANT_DETAILS: Record<string, PlantDetails> = {
     },
   },
   'cherry-bomb': {
-    name: 'Cherry Bomb',
-    cost: 150,
+    tag: 'plants/day',
+    index: 2,
+    countSeeds: 8,
+    cost: 6,
     toughness: 300,
     recharge: 50000,
     defaultLoaded: false,
@@ -40,8 +46,10 @@ export const PLANT_DETAILS: Record<string, PlantDetails> = {
     sunProduction: null,
   },
   'wall-nut': {
-    name: 'Wall-nut',
-    cost: 50,
+    tag: 'plants/day',
+    index: 3,
+    countSeeds: 8,
+    cost: 2,
     toughness: 4000,
     recharge: 30000,
     defaultLoaded: false,
@@ -49,8 +57,10 @@ export const PLANT_DETAILS: Record<string, PlantDetails> = {
     sunProduction: null,
   },
   potatomine: {
-    name: 'Potatomine',
-    cost: 25,
+    tag: 'plants/day',
+    index: 4,
+    countSeeds: 8,
+    cost: 1,
     toughness: 300,
     recharge: 30000,
     defaultLoaded: false,
@@ -61,8 +71,10 @@ export const PLANT_DETAILS: Record<string, PlantDetails> = {
     sunProduction: null,
   },
   snowpea: {
-    name: 'Snow Pea',
-    cost: 175,
+    tag: 'plants/day',
+    index: 5,
+    countSeeds: 8,
+    cost: 7,
     toughness: 300,
     recharge: 7500,
     defaultLoaded: false,
@@ -75,8 +87,10 @@ export const PLANT_DETAILS: Record<string, PlantDetails> = {
     sunProduction: null,
   },
   chomper: {
-    name: 'Chomper',
-    cost: 150,
+    tag: 'plants/day',
+    index: 6,
+    countSeeds: 8,
+    cost: 6,
     toughness: 300,
     recharge: 7500,
     defaultLoaded: false,
@@ -86,8 +100,10 @@ export const PLANT_DETAILS: Record<string, PlantDetails> = {
     sunProduction: null,
   },
   repeater: {
-    name: 'Repeater',
-    cost: 200,
+    tag: 'plants/day',
+    index: 7,
+    countSeeds: 8,
+    cost: 8,
     toughness: 300,
     recharge: 7500,
     defaultLoaded: false,
@@ -99,4 +115,4 @@ export const PLANT_DETAILS: Record<string, PlantDetails> = {
     },
     sunProduction: null,
   },
-}
+} as const

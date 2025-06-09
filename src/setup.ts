@@ -1,9 +1,13 @@
 import Game from './ge/game.js'
-import { Box } from './ge/nodes/box.js'
+import { Sprite } from './ge/nodes/sprite.js'
 import { AssetManager } from './ge/utils/asset.js'
 import { Vector } from './ge/utils/vector.js'
-import { Sunflower } from './go/plants/sunflower.js'
-import './setupAssets/image.js'
+import { setupLayers } from './setup/layers.js'
+import './setup/image.js'
+import { SunCounter } from './go/ui/sun-counter.js'
+import { SeedContainer } from './go/ui/seed-container.js'
+import { PLANT_DETAILS } from './details/plants.js'
+import { Board } from './go/ui/board.js'
 
 export async function setup() {
   await AssetManager.load(console.log)
@@ -16,17 +20,41 @@ export async function setup() {
     debug: false,
   })
 
-  Game.game.addLayer('example')
+  setupLayers()
 
-  Game.game.addNodeToLayer('example', new Box({ width: 10, height: 10 }))
   Game.game.addNodeToLayer(
-    'example',
-    new Box({ width: 24, height: 24, position: new Vector(10, 10) })
+    'ui',
+    new SunCounter({
+      position: new Vector(0, 0),
+    })
   )
 
   Game.game.addNodeToLayer(
-    'example',
-    new Sunflower({ position: new Vector(10, 10) })
+    'ui',
+    new SeedContainer({
+      type: 'plants',
+      seeds: [
+        PLANT_DETAILS.peashooter,
+        PLANT_DETAILS.sunflower,
+        PLANT_DETAILS['cherry-bomb'],
+        PLANT_DETAILS['wall-nut'],
+        PLANT_DETAILS.potatomine,
+        PLANT_DETAILS.snowpea,
+      ],
+      position: new Vector(-2, 16),
+    })
+  )
+  Game.game.addNodeToLayer(
+    'ui',
+    new Board({
+      seedContainer: SeedContainer.PLANTS!,
+      position: new Vector(40, 24),
+    })
+  )
+
+  Game.game.addNodeToLayer(
+    'background',
+    new Sprite({ sprite: AssetManager.get('day-bg')!, scale: 2 })
   )
 
   Game.game.start()

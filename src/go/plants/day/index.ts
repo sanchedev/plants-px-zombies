@@ -1,0 +1,8 @@
+export { Peashooter } from './peashooter.js'
+export { Sunflower } from './sunflower.js'
+export { CherryBomb } from './cherryBomb.js'
+export { WallNut } from './wallNut.js'
+export { PotatoMine } from './potatoMine.js'
+export { Chomper } from './chomper.js'
+export { SnowPea } from './snowPea.js'
+export { Repeater } from './repeater.js'

@@ -58,8 +58,9 @@ export default class Game {
 
     for (const layer of this.layerOrder) {
       for (const node of this.layers.get(layer)!) {
-        node.draw(dt)
-        node.update(dt)
+        const delta = node.timeRate * dt
+        if (!node.hidden) node.draw(delta)
+        node.update(delta)
       }
     }
 
@@ -122,6 +123,7 @@ export default class Game {
       throw new Error(`Layer ${name} does not exists`)
     }
     this.layers.get(name)!.push(node)
+    if (!node.started) node.start()
   }
   removeNodeFromLayer(name: string, node: Node): void {
     if (!this.layers.has(name)) {

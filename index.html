@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/assets/icon.png" type="image/png" />
     <title>Plants PX Zombies</title>
     <style>
       *,
@@ -18,9 +19,11 @@
         place-items: center;
       }
       canvas {
-        background-color: #000;
         image-rendering: pixelated;
-        width: 100%;
+        width: 100vw;
+        height: 100vh;
+        max-width: calc(100vh * 12 / 7);
+        max-height: calc(100vw * 7 / 12);
       }
     </style>
   </head>

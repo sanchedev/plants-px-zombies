@@ -1,13 +1,16 @@
 import Game from '../game.js'
+import { EvListener } from '../utils/event-listener.js'
 import { Collider } from './collider.js'
 import { Node } from './node.js'
-import { RayCastOptions } from './types.js'
+import { RayCastEvents, RayCastOptions } from './types.js'
 
 export class RayCast extends Node {
   direction: 1 | -1
   length: number
   layer: string[]
   autoCheck: boolean
+
+  disabled: boolean = false
 
   constructor(options: RayCastOptions) {
     super(options)
@@ -17,7 +20,12 @@ export class RayCast extends Node {
     this.autoCheck = options.autoCheck ?? true
   }
 
-  checkCollision() {
+  ev = new EvListener<RayCastEvents>()
+
+  target: Collider | null = null
+  checkRay() {
+    if (this.disabled) return
+
     const rayStartX = this.globalPosition.x
     const rayEndX = this.globalPosition.x + this.length * this.direction
     const rayY = this.globalPosition.y
@@ -32,11 +40,13 @@ export class RayCast extends Node {
       )
       .flat(2)
 
-    const colliders: Collider[] = []
+    let nearest: Collider | null = null
 
     for (const collider of layer) {
+      if (collider.disabled) continue
+
       if (
-        collider.globalPosition.y > rayY &&
+        collider.globalPosition.y > rayY ||
         collider.globalPosition.y + collider.size.y < rayY
       ) {
         continue
@@ -50,16 +60,29 @@ export class RayCast extends Node {
             rayEndX <= collider.globalPosition.x + collider.size.x
 
       if (intersectsX) {
-        colliders.push(collider)
+        if (nearest == null) nearest = collider
+        else if (
+          collider.globalPosition.x * this.direction <
+          nearest.globalPosition.x * this.direction
+        ) {
+          nearest = collider
+        }
       }
     }
 
-    return colliders
+    if (this.target !== nearest) {
+      if (this.target != null) this.ev._emit_('exit', this.target)
+      if (nearest != null) this.ev._emit_('collision', nearest)
+    }
+
+    this.target = nearest
+
+    return nearest
   }
 
   update(dt: number): void {
     if (this.autoCheck) {
-      this.checkCollision()
+      this.checkRay()
     }
     super.update(dt)
   }
@@ -95,8 +118,5 @@ export class RayCast extends Node {
       Game.game.ctx.closePath()
     }
     super.draw(dt)
-  }
-  destroy(): void {
-    super.destroy()
   }
 }

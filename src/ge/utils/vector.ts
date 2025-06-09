@@ -26,6 +26,10 @@ export class Vector {
     this.y = y
   }
 
+  clone() {
+    return new Vector(this.x, this.y)
+  }
+
   add(vector: Vector) {
     return new Vector(this.x + vector.x, this.y + vector.y)
   }

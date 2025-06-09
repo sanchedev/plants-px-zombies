@@ -10,6 +10,7 @@ export class Sprite extends Node {
   rows: number
   columns: number
   frame: Vector
+  scale: number
 
   constructor(options: SpriteOptions) {
     super(options)
@@ -17,6 +18,7 @@ export class Sprite extends Node {
     this.rows = options.rows ?? 1
     this.columns = options.columns ?? 1
     this.frame = options.frame ?? Vector.ZERO
+    this.scale = options.scale ?? 1
   }
 
   ev = new EvListener<SpriteEvents>()
@@ -36,8 +38,8 @@ export class Sprite extends Node {
       frameHeight,
       this.globalPosition.x,
       this.globalPosition.y,
-      frameWidth,
-      frameHeight
+      frameWidth * this.scale,
+      frameHeight * this.scale
     )
 
     super.draw(dt)

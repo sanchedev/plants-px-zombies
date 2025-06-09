@@ -17,6 +17,9 @@ export class Node {
   constructor(options: NodeOptions) {
     this.position = options.position ?? Vector.ZERO
     this.children = options.children ?? []
+    if (options.children) {
+      options.children.forEach((child) => (child.parent = this))
+    }
   }
 
   /**
@@ -69,6 +72,26 @@ export class Node {
     return Game.game.findNodeLayer(this)
   }
 
+  started: boolean = false
+  /**
+   * Here you can create the node's children. This method is called when the node is added to the game.
+   *
+   * @example
+   * ```ts
+   * start() {
+   *   // Here you can create the node's children or start other processes
+   *   super.start()
+   * }
+   * ```
+   */
+  start() {
+    this.ev._emit_('start')
+    this.children.forEach((child) => child.start())
+    this.started = true
+  }
+
+  /** The time rate of the node. */
+  timeRate: number = 1
   /**
    * Update logic.
    *
@@ -87,6 +110,7 @@ export class Node {
     this.ev._emit_('update', dt)
     this.children.forEach((child) => child.update(dt))
   }
+  hidden: boolean = false
   /**
    * Draw the node.
    *
@@ -103,7 +127,7 @@ export class Node {
    * */
   draw(dt: number): void {
     this.ev._emit_('draw', dt)
-    this.children.forEach((child) => child.draw(dt))
+    this.children.forEach((child) => !child.hidden && child.draw(dt))
   }
   /**
    * Destroy the node.
@@ -127,6 +151,9 @@ export class Node {
       Game.game.layers
         .get(layer)!
         .splice(Game.game.layers.get(layer)!.indexOf(this), 1)
+    }
+    if (this.parent) {
+      this.parent.removeChild(this)
     }
     this.ev._emit_('destroy')
   }

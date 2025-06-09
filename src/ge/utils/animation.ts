@@ -1,6 +1,8 @@
+import { Sprite } from '../nodes/sprite.js'
 import { EvListener } from './event-listener.js'
 
 interface AnimationEvents {
+  frameChanged: (frame: number) => void
   finished: () => void
 }
 
@@ -53,6 +55,7 @@ export class Animation {
       const kf = this.keyframes[i]
       if (this.currentTime >= kf.time) {
         kf.action()
+        this.ev._emit_('frameChanged', i)
         this.lastFrameIndex = i
       }
     }
@@ -69,4 +72,47 @@ export class Animation {
   }
 
   ev = new EvListener<AnimationEvents>()
+}
+
+export function animateSprite(sprite: Sprite, duration: number, loop = false) {
+  const frameDuration = duration / (sprite.columns * sprite.rows)
+
+  const keyframes = Array.from(
+    { length: sprite.columns * sprite.rows },
+    (_, i) => {
+      return {
+        time: i * frameDuration,
+        action: () => {
+          sprite.frame.x = i % sprite.columns
+          sprite.frame.y = Math.floor(i / sprite.columns)
+        },
+      }
+    }
+  )
+
+  const animation = new Animation({
+    duration,
+    keyframes,
+    loop,
+  })
+
+  return animation
+}
+
+export function animateFunc(
+  countFrames: number,
+  func: (frame: number) => void,
+  duration: number,
+  loop = false
+) {
+  const animation = new Animation({
+    duration,
+    loop,
+    keyframes: Array.from({ length: countFrames }, (_, i) => ({
+      time: (i * duration) / countFrames,
+      action: () => func(i),
+    })),
+  })
+
+  return animation
 }

@@ -1,3 +1,4 @@
+import { Animation } from '../utils/animation.js'
 import type { Asset, AssetType } from '../utils/asset.js'
 import type { Vector } from '../utils/vector.js'
 import type { Animator } from './animator.js'
@@ -16,8 +17,12 @@ export interface SpriteOptions extends NodeOptions {
   rows?: number
   columns?: number
   frame?: Vector
+  scale?: number
 }
 export interface AnimatorOptions extends NodeOptions {}
+export interface TemporalAnimationOptions extends NodeOptions {
+  animation: Animation
+}
 export interface BoxOptions extends NodeOptions {
   width: number
   height: number
@@ -64,14 +69,32 @@ export interface RayCastOptions extends NodeOptions {
   autoCheck?: boolean
 }
 export interface TimerOptions extends NodeOptions {
-  /** In milliseconds */
+  /** In seconds */
   duration: number
   /** @default false */
   loop?: boolean
 }
+export interface MouseCheckerOptions extends NodeOptions {}
+export interface ClickableOptions extends NodeOptions {
+  disabled?: boolean
+  size: Vector
+  /** It's the texture of the normal state */
+  normalSprite: Sprite
+  /** It's the texture of the hover state */
+  hoverSprite?: Sprite
+  /** It's the texture of the pressed state */
+  pressedSprite?: Sprite
+  /** It's the texture of the disabled state */
+  disabledSprite?: Sprite
+}
+export interface TextOptions extends NodeOptions {
+  text: string
+  textAlign?: 'left' | 'center' | 'right'
+}
 
 // Events
 export interface NodeEvents {
+  start: () => void
   update: (dt: number) => void
   draw: (dt: number) => void
   destroy: () => void
@@ -79,12 +102,22 @@ export interface NodeEvents {
 export interface SpriteEvents extends NodeEvents {}
 export interface ColliderEvents extends NodeEvents {
   collision: (collider: Collider) => void
+  exit: (collider: Collider) => void
 }
 export interface RayCastEvents extends NodeEvents {
   collision: (collider: Collider) => void
+  exit: (collider: Collider) => void
 }
 export interface TimerEvents extends NodeEvents {
   finished: () => void
+}
+export interface MouseCheckerEvents extends NodeEvents {
+  move: (position: Vector) => void
+  press: (position: Vector) => void
+  release: (position: Vector) => void
+}
+export interface ClickableEvents extends NodeEvents {
+  click: () => void
 }
 
 // Nodes
