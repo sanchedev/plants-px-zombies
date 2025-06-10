@@ -1,6 +1,6 @@
-import { Node } from '../../ge/nodes/node.js'
-import { NodeEvents, NodeOptions } from '../../ge/nodes/types.js'
-import { EvListener } from '../../ge/utils/event-listener.js'
+import { Node } from '../../../ge/nodes/node.js'
+import { NodeEvents, NodeOptions } from '../../../ge/nodes/types.js'
+import { EvListener } from '../../../ge/utils/event-listener.js'
 import { SeedDetails, SeedItem } from './seed-item.js'
 
 export interface SeedContainerOptions<T extends 'plants' | 'zombies'>

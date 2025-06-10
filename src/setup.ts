@@ -5,9 +5,10 @@ import { Vector } from './ge/utils/vector.js'
 import { setupLayers } from './setup/layers.js'
 import './setup/image.js'
 import { SunCounter } from './go/ui/sun-counter.js'
-import { SeedContainer } from './go/ui/seed-container.js'
+import { SeedContainer } from './go/ui/seed/seed-container.js'
 import { PLANT_DETAILS } from './details/plants.js'
 import { Board } from './go/ui/board.js'
+import { SunSpawner } from './go/spawners/sunSpawner.js'
 
 export async function setup() {
   await AssetManager.load(console.log)
@@ -49,6 +50,13 @@ export async function setup() {
     new Board({
       seedContainer: SeedContainer.PLANTS!,
       position: new Vector(40, 24),
+    })
+  )
+
+  Game.game.addNodeToLayer(
+    'ui',
+    new SunSpawner({
+      position: new Vector(40, 0),
     })
   )
 

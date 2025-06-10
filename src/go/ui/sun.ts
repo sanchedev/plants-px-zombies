@@ -2,6 +2,7 @@ import { TILE_SIZE } from '../../constants.js'
 import { Clickable } from '../../ge/nodes/clickable.js'
 import { Node } from '../../ge/nodes/node.js'
 import { Sprite } from '../../ge/nodes/sprite.js'
+import { Timer } from '../../ge/nodes/timer.js'
 import { NodeOptions } from '../../ge/nodes/types.js'
 import { AssetManager, AssetType, createAsset } from '../../ge/utils/asset.js'
 import { Vector } from '../../ge/utils/vector.js'
@@ -9,7 +10,7 @@ import { SunCounter } from './sun-counter.js'
 
 createAsset('sun', '/assets/sprites/ui/sun.png', AssetType.Image)
 
-const SUN_SPEED = 2
+const SUN_SPEED = 0.5
 
 export interface SunOptions extends NodeOptions {
   /** Start in y and falling to */
@@ -48,6 +49,16 @@ export class Sun extends Node {
       this.state = 'picked'
     })
 
+    const deathTimer = new Timer({
+      duration: 30,
+    })
+
+    this.addChild(deathTimer)
+    deathTimer.ev.on('finished', () => {
+      this.destroy()
+    })
+    deathTimer.play()
+
     super.start()
   }
 
@@ -58,7 +69,7 @@ export class Sun extends Node {
 
   update(dt: number): void {
     if (this.state === 'picked') {
-      const move = SUN_SPEED * 4 * TILE_SIZE * dt
+      const move = SUN_SPEED * 32 * TILE_SIZE * dt
       this.position.x -= this.relX * move
       this.position.y -= this.relY * move
       if (this.position.y <= 6 && this.position.x <= 3) {

@@ -33,6 +33,7 @@ export class Timer extends Node {
     if (this.#isRunning) {
       this.timer += dt
       if (this.timer >= this.duration) {
+        this.timer = this.duration
         this.stop()
         this.ev._emit_('finished')
         if (this.loop) {

@@ -9,8 +9,8 @@ import { NodeOptions } from '../../ge/nodes/types.js'
 import { Vector } from '../../ge/utils/vector.js'
 import { PLANTS } from '../plants/index.js'
 import { ZOMBIES } from '../zombies/index.js'
-import { SeedContainer } from './seed-container.js'
-import { SeedDetails, SeedItem } from './seed-item.js'
+import { SeedContainer } from './seed/seed-container.js'
+import { SeedDetails, SeedItem } from './seed/seed-item.js'
 
 interface BoardOptions<T extends 'plants' | 'zombies'> extends NodeOptions {
   seedContainer: SeedContainer<T>

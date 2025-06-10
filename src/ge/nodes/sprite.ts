@@ -44,6 +44,9 @@ export class Sprite extends Node {
 
     super.draw(dt)
   }
+  superDraw(dt: number): void {
+    super.draw(dt)
+  }
   destroy(): void {
     super.destroy()
   }
