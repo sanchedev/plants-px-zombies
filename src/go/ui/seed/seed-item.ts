@@ -1,5 +1,6 @@
 import { Clickable } from '../../../ge/nodes/clickable.js'
 import { Node } from '../../../ge/nodes/node.js'
+import { Sprite } from '../../../ge/nodes/sprite.js'
 import { Timer } from '../../../ge/nodes/timer.js'
 import { NodeEvents, NodeOptions } from '../../../ge/nodes/types.js'
 import {
@@ -15,11 +16,6 @@ import { SeedSprite } from './seedSprite.js'
 createAsset(
   'plants/day',
   '/assets/sprites/ui/seeds/plants/day.png',
-  AssetType.Image
-)
-createAsset(
-  'plants/day-selected',
-  '/assets/sprites/ui/seeds/plants/day-selected.png',
   AssetType.Image
 )
 
@@ -55,15 +51,24 @@ export class SeedItem<T extends 'plants' | 'zombies'> extends Node {
     const sprite = new SeedSprite({
       sprite: AssetManager.get(this.details.tag)!,
       columns: this.details.countSeeds,
+      rows: 4,
       frame: new Vector(this.details.index, 0),
       getRechargePercentage: () => this.timer / this.duration,
       getCanBuy: () => SunCounter.instance.count >= this.details.cost,
-    }) // TODO: mod the sprite to show the recharge, and the cost
+    })
+
+    const hoverSprite = new Sprite({
+      sprite: AssetManager.get(this.details.tag)!,
+      columns: this.details.countSeeds,
+      rows: 4,
+      frame: new Vector(this.details.index, 1),
+    })
 
     this.sprite = sprite
 
     const clickable = new Clickable({
       normalSprite: sprite,
+      hoverSprite,
       size: new Vector(24, 16),
     })
     this.addChild(clickable)
@@ -72,6 +77,8 @@ export class SeedItem<T extends 'plants' | 'zombies'> extends Node {
       else this.select()
     })
 
+    this.clickable = clickable
+
     if (this.details.defaultLoaded) this.timer = this.details.recharge / 1000
 
     this.duration = this.details.recharge / 1000
@@ -79,6 +86,7 @@ export class SeedItem<T extends 'plants' | 'zombies'> extends Node {
     super.start()
   }
 
+  clickable!: Clickable
   sprite!: SeedSprite
   timer: number = 0
   duration: number = 0
@@ -91,13 +99,15 @@ export class SeedItem<T extends 'plants' | 'zombies'> extends Node {
     if (!this.canUseSeed()) return
     this.selected = true
     this.ev._emit_('selected', this.details)
-    this.sprite.sprite = AssetManager.get(this.details.tag + '-selected')!
+    this.sprite.frame.y = 2
+    this.clickable.hoverSprite!.frame.y = 3
   }
 
   deselect() {
     this.selected = false
     this.ev._emit_('deselected', this.details)
-    this.sprite.sprite = AssetManager.get(this.details.tag)!
+    this.sprite.frame.y = 0
+    this.clickable.hoverSprite!.frame.y = 1
   }
 
   canUseSeed() {
@@ -119,6 +129,12 @@ export class SeedItem<T extends 'plants' | 'zombies'> extends Node {
       if (this.timer >= this.duration) {
         this.timer = this.duration
       }
+    }
+
+    if (this.canUseSeed() && this.clickable.disabled) {
+      this.clickable.disabled = false
+    } else if (!this.canUseSeed() && !this.clickable.disabled) {
+      this.clickable.disabled = true
     }
 
     super.update(dt)

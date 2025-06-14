@@ -111,6 +111,6 @@ export class Sunflower extends Plant {
       ),
       fallingHeight: Math.floor(Math.random() * 3) + 3,
     })
-    Game.game.addNodeToLayer('ui', sun)
+    Game.game.addNodeToLayer('playable-ui', sun)
   }
 }

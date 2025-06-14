@@ -32,9 +32,18 @@ export class Sun extends Node {
     const clickable = new Clickable({
       position: new Vector(0, 0),
       normalSprite: new Sprite({
+        position: new Vector(-1, -1),
         sprite: AssetManager.get('sun')!,
+        columns: 2,
+        frame: new Vector(0, 0),
       }),
-      size: new Vector(8, 8),
+      hoverSprite: new Sprite({
+        position: new Vector(-1, -1),
+        sprite: AssetManager.get('sun')!,
+        columns: 2,
+        frame: new Vector(1, 0),
+      }),
+      size: new Vector(10, 10),
     })
 
     this.addChild(clickable)
@@ -81,7 +90,7 @@ export class Sun extends Node {
     if (this.state === 'idle') {
       if (this.position.y < this.finalPosition.y) {
         this.position.y += SUN_SPEED * TILE_SIZE * dt
-      } else {
+      } else if (this.position.y !== this.finalPosition.y) {
         this.position.y = this.finalPosition.y
       }
     }

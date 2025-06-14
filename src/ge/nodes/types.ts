@@ -3,9 +3,14 @@ import type { Asset, AssetType } from '../utils/asset.js'
 import type { Vector } from '../utils/vector.js'
 import type { Animator } from './animator.js'
 import type { Box } from './box.js'
+import { Clickable } from './clickable.js'
 import type { Collider } from './collider.js'
+import { MouseChecker } from './mouseChecker.js'
 import type { Node } from './node.js'
+import { RayCast } from './raycast.js'
 import type { Sprite } from './sprite.js'
+import { Text } from './text.js'
+import { Timer } from './timer.js'
 
 // Options
 export interface NodeOptions {
@@ -98,6 +103,8 @@ export interface NodeEvents {
   update: (dt: number) => void
   draw: (dt: number) => void
   destroy: () => void
+  resumeProcessing: () => void
+  pauseProcessing: () => void
 }
 export interface SpriteEvents extends NodeEvents {}
 export interface ColliderEvents extends NodeEvents {
@@ -116,15 +123,21 @@ export interface MouseCheckerEvents extends NodeEvents {
   press: (position: Vector) => void
   release: (position: Vector) => void
 }
-export interface ClickableEvents extends NodeEvents {
+export interface ClickableEvents extends MouseCheckerEvents {
   click: () => void
+  clickOutside: () => void
 }
 
 // Nodes
 export interface Nodes {
   node: Node
   sprite: Sprite
+  collider: Collider
+  rayCast: RayCast
   animator: Animator
   box: Box
-  collider: Collider
+  timer: Timer
+  mouseChecker: MouseChecker
+  clickable: Clickable
+  text: Text
 }

@@ -1,4 +1,4 @@
-import { TILE_SIZE } from '../../constants.js'
+import { BOARD_OFFSET, TILE_SIZE } from '../../constants.js'
 import { PLANT_DETAILS } from '../../details/plants.js'
 import { ZOMBIE_DETAILS } from '../../details/zombies.js'
 import Game from '../../ge/game.js'
@@ -15,6 +15,10 @@ import { SeedDetails, SeedItem } from './seed/seed-item.js'
 interface BoardOptions<T extends 'plants' | 'zombies'> extends NodeOptions {
   seedContainer: SeedContainer<T>
 }
+
+const seededsPlants = new Map<`${number}-${number}`, Node>()
+
+const padding = 2
 
 export class Board<T extends 'plants' | 'zombies'> extends Node {
   seedContainer: SeedContainer<T>
@@ -71,6 +75,11 @@ export class Board<T extends 'plants' | 'zombies'> extends Node {
       ) as SeedItem<T>
 
       if (!seed.canUseSeed()) return
+      if (
+        this.seedContainer.type === 'plants' &&
+        seededsPlants.has(`${x}-${y}`)
+      )
+        return
 
       seed.useSeed()
       const mayorObj = (
@@ -83,12 +92,20 @@ export class Board<T extends 'plants' | 'zombies'> extends Node {
         ([_, value]) => value === seed.details
       )![0]
 
-      Game.game.addNodeToLayer(
-        'row' + (y + 1) + '-plants',
-        new mayorObj[key]({
-          position: new Vector(40 + x * TILE_SIZE, 24 + y * TILE_SIZE),
+      const node = new mayorObj[key]({
+        position: new Vector(x * TILE_SIZE, y * TILE_SIZE - padding).add(
+          BOARD_OFFSET
+        ),
+      })
+
+      if (this.seedContainer.type === 'plants') {
+        seededsPlants.set(`${x}-${y}`, node)
+        node.ev.on('destroy', () => {
+          seededsPlants.delete(`${x}-${y}`)
         })
-      )
+      }
+
+      Game.game.addNodeToLayer('row' + (y + 1) + '-plants', node)
     })
 
     boxX.hidden = true

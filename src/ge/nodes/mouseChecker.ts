@@ -46,6 +46,22 @@ export class MouseChecker extends Node {
     this.ev._emit_('release', this.#calculatePosition(ev))
   }
 
+  onPauseProcessing(): void {
+    Game.game.canvas.removeEventListener('mousemove', this.onMouseMove)
+    Game.game.canvas.removeEventListener('mousedown', this.onMouseDown)
+    Game.game.canvas.removeEventListener('mouseup', this.onMouseUp)
+
+    super.onPauseProcessing()
+  }
+
+  onResumeProcessing(): void {
+    Game.game.canvas.addEventListener('mousemove', this.onMouseMove)
+    Game.game.canvas.addEventListener('mousedown', this.onMouseDown)
+    Game.game.canvas.addEventListener('mouseup', this.onMouseUp)
+
+    super.onResumeProcessing()
+  }
+
   destroy(): void {
     Game.game.canvas.removeEventListener('mousemove', this.onMouseMove)
     Game.game.canvas.removeEventListener('mousedown', this.onMouseDown)

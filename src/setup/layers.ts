@@ -18,6 +18,7 @@ export const enum Layers {
   Row5Zombies = 'row5-zombies',
   Row5Projectiles = 'row5-projectiles',
 
+  PlayableUI = 'playable-ui',
   UI = 'ui',
 }
 
@@ -39,5 +40,6 @@ export function setupLayers() {
   Game.game.addLayer(Layers.Row5Zombies)
   Game.game.addLayer(Layers.Row5Projectiles)
 
+  Game.game.addLayer(Layers.PlayableUI)
   Game.game.addLayer(Layers.UI)
 }

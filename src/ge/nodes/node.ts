@@ -1,7 +1,18 @@
 import Game from '../game.js'
 import { EvListener } from '../utils/event-listener.js'
 import { Vector } from '../utils/vector.js'
-import { NodeEvents, NodeOptions, Nodes } from './types.js'
+import { NodeEvents, NodeOptions } from './types.js'
+
+export enum NodeProcess {
+  /** Only the node will be processed if the game is not paused. */
+  NORMAL,
+  /** Only the node will be processed if the game is paused. */
+  PAUSED,
+  /** The node always will be processed. */
+  ALWAYS,
+  /** The node will be processed if the parent is paused. */
+  INHERIT,
+}
 
 export class Node {
   position: Vector
@@ -20,6 +31,12 @@ export class Node {
     if (options.children) {
       options.children.forEach((child) => (child.parent = this))
     }
+  }
+
+  process = NodeProcess.INHERIT
+  get treeProcess(): NodeProcess {
+    if (this.parent == null) return this.process
+    return this.parent.treeProcess
   }
 
   /**
@@ -90,6 +107,11 @@ export class Node {
     this.started = true
   }
 
+  _refresh() {
+    this.isProcessing = Game.canNodeProcess(this)
+    this.children.forEach((child) => child._refresh())
+  }
+
   /** The time rate of the node. */
   timeRate: number = 1
   /**
@@ -156,5 +178,13 @@ export class Node {
       this.parent.removeChild(this)
     }
     this.ev._emit_('destroy')
+  }
+
+  isProcessing = false
+  onResumeProcessing() {
+    this.ev._emit_('resumeProcessing')
+  }
+  onPauseProcessing() {
+    this.ev._emit_('pauseProcessing')
   }
 }

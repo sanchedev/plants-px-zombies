@@ -33,6 +33,6 @@ export class SunSpawner extends Node {
       fallingHeight:
         16 + Math.floor(Math.random() * 3 * TILE_SIZE) + 24 + TILE_SIZE,
     })
-    Game.game.addNodeToLayer('ui', sun)
+    Game.game.addNodeToLayer('playable-ui', sun)
   }
 }

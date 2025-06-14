@@ -1,5 +1,5 @@
 import { Camera } from './camera.js'
-import { Node } from './nodes/node.js'
+import { Node, NodeProcess } from './nodes/node.js'
 
 export interface GameOptions {
   width: number
@@ -36,6 +36,18 @@ export default class Game {
   ctx: CanvasRenderingContext2D
 
   static game: Game
+  static canNodeProcess(node: Node): boolean {
+    const processMode = node.process
+    if (processMode === NodeProcess.ALWAYS) return true
+    if (processMode === NodeProcess.NORMAL) return !Game.game.isPaused
+    if (processMode === NodeProcess.PAUSED) return Game.game.isPaused
+    if (processMode === NodeProcess.INHERIT) {
+      if (node.parent == null) return !Game.game.isPaused
+      return Game.canNodeProcess(node.parent)
+    }
+    return false
+  }
+
   camera: Camera = new Camera()
 
   start(): void {
@@ -48,9 +60,8 @@ export default class Game {
 
   lastTimestamp: number = 0
   currentAnimationFrame: number | null = null
+  isPaused: boolean = false
   update(timestamp: number): void {
-    if (this.isPaused) return
-
     this.ctx.clearRect(0, 0, this.width, this.height)
 
     const dt = (timestamp - this.lastTimestamp) / 1000
@@ -58,25 +69,39 @@ export default class Game {
 
     for (const layer of this.layerOrder) {
       for (const node of this.layers.get(layer)!) {
+        const lastIsProcessing = node.isProcessing
         const delta = node.timeRate * dt
-        if (!node.hidden) node.draw(delta)
-        node.update(delta)
+
+        node._refresh()
+
+        if (lastIsProcessing !== node.isProcessing) {
+          if (node.isProcessing) node.onResumeProcessing()
+          else node.onPauseProcessing()
+        }
+
+        if (node.hidden) continue
+
+        node.draw(delta)
+
+        switch (node.process) {
+          case NodeProcess.NORMAL:
+            if (!this.isPaused) node.update(delta)
+            break
+          case NodeProcess.PAUSED:
+            if (this.isPaused) node.update(delta)
+            break
+          case NodeProcess.ALWAYS:
+            node.update(delta)
+            break
+          case NodeProcess.INHERIT:
+            if (Game.canNodeProcess(node)) {
+              node.update(delta)
+            }
+        }
       }
     }
 
     window.requestAnimationFrame(this.update.bind(this))
-  }
-
-  isPaused: boolean = false
-  pause(): void {
-    this.isPaused = true
-  }
-  resume(): void {
-    this.isPaused = false
-    window.requestAnimationFrame((timestamp) => {
-      this.lastTimestamp = timestamp
-      window.requestAnimationFrame(this.update.bind(this))
-    })
   }
 
   layers = new Map<string, Node[]>()

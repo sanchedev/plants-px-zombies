@@ -9,14 +9,18 @@ import { SeedContainer } from './go/ui/seed/seed-container.js'
 import { PLANT_DETAILS } from './details/plants.js'
 import { Board } from './go/ui/board.js'
 import { SunSpawner } from './go/spawners/sunSpawner.js'
+import { tilePos } from './lib/tiles.js'
+import { BOARD_OFFSET } from './constants.js'
+import { PauseButton } from './go/ui/pause/pause-button.js'
+import { PauseMenu } from './go/ui/pause/pause-menu.js'
 
 export async function setup() {
   await AssetManager.load(console.log)
 
   new Game({
     width: 192,
-    height: 112,
-    scale: 5,
+    height: 128,
+    scale: 4,
     canvasId: 'game',
     debug: false,
   })
@@ -49,21 +53,28 @@ export async function setup() {
     'ui',
     new Board({
       seedContainer: SeedContainer.PLANTS!,
-      position: new Vector(40, 24),
+      position: tilePos(0, 0),
     })
   )
 
   Game.game.addNodeToLayer(
     'ui',
     new SunSpawner({
-      position: new Vector(40, 0),
+      position: new Vector(BOARD_OFFSET.x, 0),
     })
+  )
+
+  Game.game.addNodeToLayer(
+    'ui',
+    new PauseButton({ position: new Vector(176, 2) })
   )
 
   Game.game.addNodeToLayer(
     'background',
     new Sprite({ sprite: AssetManager.get('day-bg')!, scale: 2 })
   )
+
+  Game.game.addNodeToLayer('ui', new PauseMenu({}))
 
   Game.game.start()
 }
