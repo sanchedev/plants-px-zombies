@@ -93,11 +93,11 @@ export class PoleVaultingZombie extends Zombie {
       if (collider.parent instanceof Plant) {
         this.moveState = PoleVaultingZombieMoveState.Eating
         animator.play('eating')
-        this.target = collider.parent
+        this.target = collider
       }
     })
     collider.ev.on('exit', (collider) => {
-      if (collider.parent === this.target) {
+      if (collider === this.target) {
         this.moveState = PoleVaultingZombieMoveState.Walking
         animator.play('walking')
       }
@@ -137,7 +137,7 @@ export class PoleVaultingZombie extends Zombie {
         sprite.rows = 1 // Comming soon... 2
       }
 
-      const jumping = animateFunc(6, jumpingFrame, 1000)
+      const jumping = animateFunc(6, jumpingFrame, 400)
       animator.add('jumping', jumping)
       const onAir = animateFunc(10, onAirFrame, 2000)
       animator.add('onAir', onAir)
@@ -180,11 +180,11 @@ export class PoleVaultingZombie extends Zombie {
 
   healthState: ZombieHealthState = ZombieHealthState.Normal
   moveState: PoleVaultingZombieMoveState = PoleVaultingZombieMoveState.Running
-  target: Plant | null = null
+  target: Collider | null = null
 
   eat() {
     if (this.target) {
-      this.target.damage(ZombieDamages.Eat)
+      ;(this.target.parent as Plant).damage(ZombieDamages.Eat)
     }
   }
 
@@ -213,9 +213,11 @@ export class PoleVaultingZombie extends Zombie {
         (TILE_SIZE / ZOMBIE_DETAILS['pole-vaulting-zombie'].speed[0]) * dt
       )
     } else if (this.moveState === PoleVaultingZombieMoveState.Jumping) {
-      // No movement
+      this.move(
+        (TILE_SIZE / ZOMBIE_DETAILS['pole-vaulting-zombie'].speed[0]) * dt
+      )
     } else if (this.moveState === PoleVaultingZombieMoveState.OnAir) {
-      this.position.x -= (TILE_SIZE * dt) / 0.5 // because the zombie is moving in the air and not in the ground
+      this.position.x -= (TILE_SIZE * dt) / 0.7 // because the zombie is moving in the air and not in the ground
     } else if (this.moveState === PoleVaultingZombieMoveState.Pause) {
       // No movement
     } else if (this.moveState === PoleVaultingZombieMoveState.Walking) {

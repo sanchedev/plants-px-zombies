@@ -126,10 +126,11 @@ export class ConeheadZombie extends Zombie {
         this.state = ZombieState.Eating
         animator.play('eating')
         this.plant = collider.parent
+        this.plantCollider = collider
       }
     })
     collider.ev.on('exit', (collider) => {
-      if (collider.parent === this.plant) {
+      if (collider === this.plantCollider) {
         this.state = ZombieState.Walking
         animator.play('walking')
       }
@@ -145,6 +146,7 @@ export class ConeheadZombie extends Zombie {
   hasHalfLife = false
   state: ZombieState = ZombieState.Walking
   plant: Plant | null = null
+  plantCollider: Collider | null = null
 
   walk(dt: number) {
     this.move((TILE_SIZE / this.speed) * dt)

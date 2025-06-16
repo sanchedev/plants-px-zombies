@@ -1,6 +1,6 @@
 import { PLANT_DETAILS } from '../../../details/plants.js'
 import Game from '../../../ge/game.js'
-import { checkCollisionInLayer } from '../../../ge/nodes/collider.js'
+import { checkCollisionInLayer, Collider } from '../../../ge/nodes/collider.js'
 import { Sprite } from '../../../ge/nodes/sprite.js'
 import { TemporalAnimation } from '../../../ge/nodes/temporalAnimation.js'
 import { animateSprite } from '../../../ge/utils/animation.js'
@@ -48,13 +48,45 @@ export class CherryBomb extends Plant {
         })
       )
 
+      const detectZombies = () => {
+        const colliders: Collider[] = []
+
+        const rowNumber = getRow(layer)
+
+        colliders.push(
+          ...checkCollisionInLayer(
+            row(rowNumber, 'zombie'),
+            pos,
+            new Vector(48, 48)
+          )
+        )
+
+        if (rowNumber > 1) {
+          colliders.push(
+            ...checkCollisionInLayer(
+              row(rowNumber - 1, 'zombie'),
+              pos,
+              new Vector(48, 48)
+            )
+          )
+        }
+
+        if (rowNumber < 5) {
+          colliders.push(
+            ...checkCollisionInLayer(
+              row(rowNumber + 1, 'zombie'),
+              pos,
+              new Vector(48, 48)
+            )
+          )
+        }
+
+        return colliders
+      }
+
       animation.ev.on('frameChanged', (frame) => {
         if (frame !== 8) return
-        const colliders = checkCollisionInLayer(
-          row(getRow(layer as Layers), 'zombie'),
-          pos,
-          new Vector(48, 48)
-        )
+        const colliders = detectZombies()
 
         colliders.forEach(
           (collider) =>

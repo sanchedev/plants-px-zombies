@@ -49,8 +49,10 @@ export class Sun extends Node {
     this.addChild(clickable)
 
     clickable.ev.on('click', () => {
-      const x = this.globalPosition.x - 3
-      const y = this.globalPosition.y - 6
+      const x = this.globalPosition.x - SunCounter.instance.globalPosition.x
+      const y = this.globalPosition.y - SunCounter.instance.globalPosition.y
+      if (y < 0) this.oriY = -1
+      else this.oriY = 1
       const h = Math.sqrt(x * x + y * y)
       this.relX = x / h
       this.relY = y / h
@@ -76,12 +78,18 @@ export class Sun extends Node {
   relX = 1
   relY = 1
 
+  oriY: number = 0
+
   update(dt: number): void {
     if (this.state === 'picked') {
       const move = SUN_SPEED * 32 * TILE_SIZE * dt
       this.position.x -= this.relX * move
       this.position.y -= this.relY * move
-      if (this.position.y <= 6 && this.position.x <= 3) {
+      if (
+        this.globalPosition.y * this.oriY <=
+          SunCounter.instance.globalPosition.y * this.oriY &&
+        this.globalPosition.x <= SunCounter.instance.globalPosition.x
+      ) {
         SunCounter.instance.count += 1
         this.destroy()
       }

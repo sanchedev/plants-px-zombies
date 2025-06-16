@@ -50,9 +50,24 @@ export class Chomper extends Plant {
     })
     this.addChild(rayCast)
 
+    const loadingAttackFrame = (frame: number) => {
+      sprite.sprite = AssetManager.get('chomper-loading-attack')!
+      sprite.frame.x = frame
+      sprite.frame.y = 0
+      sprite.columns = 10
+      sprite.rows = 1
+    }
+
     const startCatchingFrame = (frame: number) => {
       sprite.sprite = AssetManager.get('chomper-start-catching')!
       sprite.frame.x = frame
+      sprite.frame.y = 0
+      sprite.columns = 9
+      sprite.rows = 1
+    }
+    const catchingFailedFrame = (frame: number) => {
+      sprite.sprite = AssetManager.get('chomper-start-catching')!
+      sprite.frame.x = 8 - frame
       sprite.frame.y = 0
       sprite.columns = 9
       sprite.rows = 1
@@ -65,16 +80,34 @@ export class Chomper extends Plant {
       sprite.rows = 1
     }
 
-    const startCatching = animateFunc(9, startCatchingFrame, 1000)
-    const finishCatching = animateFunc(9, finishCatchingFrame, 1000)
+    const loadingAttack = animateFunc(10, loadingAttackFrame, 2000)
+    const startCatching = animateFunc(9, startCatchingFrame, 600)
+    const catchingFailed = animateFunc(9, catchingFailedFrame, 600)
+    const finishCatching = animateFunc(9, finishCatchingFrame, 600)
 
+    animator.add('loading-attack', loadingAttack)
     animator.add('start-catching', startCatching)
+    animator.add('catching-failed', catchingFailed)
     animator.add('finish-catching', finishCatching)
 
+    loadingAttack.ev.on('finished', () => {
+      animator.play('start-catching')
+    })
     startCatching.ev.on('finished', () => {
-      animator.play('finish-catching')
+      const collider = rayCast.checkRay()
+      if (collider?.parent instanceof Zombie) {
+        collider.parent.damage(1800, ReasonToDieOfZombie.Eaten)
+        animator.play('finish-catching')
+        this.isEating = true
+      } else {
+        animator.play('catching-failed')
+      }
     })
     finishCatching.ev.on('finished', () => {
+      animator.play('idle')
+      timer.play()
+    })
+    catchingFailed.ev.on('finished', () => {
       animator.play('idle')
       timer.play()
     })
@@ -83,13 +116,7 @@ export class Chomper extends Plant {
       const zombie = z.parent
       if (!(zombie instanceof Zombie)) return
       if (this.isEating) return
-      this.isEating = true
-      animator.play('start-catching')
-      const onFinishStartingCatching = () => {
-        zombie.damage(1800, ReasonToDieOfZombie.Eaten)
-        startCatching.ev.off('finished', onFinishStartingCatching)
-      }
-      startCatching.ev.on('finished', onFinishStartingCatching)
+      animator.play('loading-attack')
     })
 
     const timer = new Timer({
@@ -121,7 +148,7 @@ export class Chomper extends Plant {
 
     const collider = new Collider({
       position: new Vector(3, 5),
-      size: new Vector(5, 11),
+      size: new Vector(10, 11),
       layer: [],
       autoCheck: false,
     })

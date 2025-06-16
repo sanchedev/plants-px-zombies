@@ -75,6 +75,11 @@ createAsset(
   AssetType.Image
 )
 createAsset(
+  'chomper-loading-attack',
+  '/assets/sprites/plants/day/chomper/loading-attack.png',
+  AssetType.Image
+)
+createAsset(
   'chomper-start-catching',
   '/assets/sprites/plants/day/chomper/start-catching.png',
   AssetType.Image
