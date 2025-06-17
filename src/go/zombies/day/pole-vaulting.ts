@@ -5,7 +5,7 @@ import { Animator } from '../../../ge/nodes/animator.js'
 import { Collider } from '../../../ge/nodes/collider.js'
 import { RayCast } from '../../../ge/nodes/raycast.js'
 import { Sprite } from '../../../ge/nodes/sprite.js'
-import { TemporalAnimation } from '../../../ge/nodes/temporalAnimation.js'
+import { TemporalAnimation } from '../../../ge/nodes/temporal-animation.js'
 import {
   animateFunc,
   animateSprite,
@@ -13,7 +13,7 @@ import {
 } from '../../../ge/utils/animation.js'
 import { AssetManager } from '../../../ge/utils/asset.js'
 import { Vector } from '../../../ge/utils/vector.js'
-import { getRow, row } from '../../../lib/getRow.js'
+import { getRow, row } from '../../../lib/row.js'
 import { Plant } from '../../plants/plant.js'
 import { Zombie } from '../zombie.js'
 

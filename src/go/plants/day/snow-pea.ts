@@ -8,9 +8,9 @@ import { Sprite } from '../../../ge/nodes/sprite.js'
 import { animateFunc, Animation } from '../../../ge/utils/animation.js'
 import { AssetManager } from '../../../ge/utils/asset.js'
 import { Vector } from '../../../ge/utils/vector.js'
-import { getRow, row } from '../../../lib/getRow.js'
+import { getRow, row } from '../../../lib/row.js'
 import { getTilePositionFromPosition } from '../../../lib/tiles.js'
-import { FrozenPea } from '../../projectiles/frozenPea.js'
+import { FrozenPea } from '../../projectiles/frozen-pea.js'
 import { Plant } from '../plant.js'
 
 export class SnowPea extends Plant {

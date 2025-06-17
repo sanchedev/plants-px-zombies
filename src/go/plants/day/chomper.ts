@@ -7,7 +7,7 @@ import { Timer } from '../../../ge/nodes/timer.js'
 import { animateFunc } from '../../../ge/utils/animation.js'
 import { AssetManager } from '../../../ge/utils/asset.js'
 import { Vector } from '../../../ge/utils/vector.js'
-import { getRow, row } from '../../../lib/getRow.js'
+import { getRow, row } from '../../../lib/row.js'
 import { ReasonToDieOfZombie, Zombie } from '../../zombies/zombie.js'
 import { Plant } from '../plant.js'
 

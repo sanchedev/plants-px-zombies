@@ -4,7 +4,7 @@ import Game from '../../../ge/game.js'
 import { Animator } from '../../../ge/nodes/animator.js'
 import { Collider } from '../../../ge/nodes/collider.js'
 import { Sprite } from '../../../ge/nodes/sprite.js'
-import { TemporalAnimation } from '../../../ge/nodes/temporalAnimation.js'
+import { TemporalAnimation } from '../../../ge/nodes/temporal-animation.js'
 import { animateSprite, Animation } from '../../../ge/utils/animation.js'
 import {
   AssetManager,
@@ -12,24 +12,24 @@ import {
   createAsset,
 } from '../../../ge/utils/asset.js'
 import { Vector } from '../../../ge/utils/vector.js'
-import { row, getRow } from '../../../lib/getRow.js'
+import { row, getRow } from '../../../lib/row.js'
 import { Layers } from '../../../setup/layers.js'
 import { Plant } from '../../plants/plant.js'
 import { Zombie } from '../zombie.js'
 
 createAsset(
-  'buckethead-zombie-walking',
-  '/assets/sprites/zombies/day/buckethead-zombie/walking.png',
+  'conehead-zombie-walking',
+  '/assets/sprites/zombies/day/conehead-zombie/walking.png',
   AssetType.Image
 )
 createAsset(
-  'buckethead-zombie-eating',
-  '/assets/sprites/zombies/day/buckethead-zombie/eating.png',
+  'conehead-zombie-eating',
+  '/assets/sprites/zombies/day/conehead-zombie/eating.png',
   AssetType.Image
 )
 createAsset(
-  'buckethead-zombie-bucket-broken',
-  '/assets/sprites/zombies/day/buckethead-zombie/bucket-broken.png',
+  'conehead-zombie-cone-broken',
+  '/assets/sprites/zombies/day/conehead-zombie/cone-broken.png',
   AssetType.Image
 )
 
@@ -38,16 +38,16 @@ enum ZombieState {
   Eating = 'eating',
 }
 
-export class BucketheadZombie extends Zombie {
+export class ConeheadZombie extends Zombie {
   health =
-    ZOMBIE_DETAILS['buckethead-zombie'].health[0] +
-    ZOMBIE_DETAILS['buckethead-zombie'].health[1]
+    ZOMBIE_DETAILS['conehead-zombie'].health[0] +
+    ZOMBIE_DETAILS['conehead-zombie'].health[1]
 
-  speed = ZOMBIE_DETAILS['buckethead-zombie'].speed
+  speed = ZOMBIE_DETAILS['conehead-zombie'].speed
 
   start(): void {
     const sprite = new Sprite({
-      sprite: AssetManager.get('buckethead-zombie-walking')!,
+      sprite: AssetManager.get('conehead-zombie-walking')!,
       columns: 4,
       rows: 2,
     })
@@ -57,9 +57,9 @@ export class BucketheadZombie extends Zombie {
 
     const walkingFrame = (frame: number) => {
       if (this.hasCone) {
-        sprite.sprite = AssetManager.get('buckethead-zombie-walking')!
+        sprite.sprite = AssetManager.get('conehead-zombie-walking')!
         sprite.frame.x = frame
-        sprite.frame.y = this.bucketHasHalfLife ? 1 : 0
+        sprite.frame.y = this.coneHasHalfLife ? 1 : 0
         sprite.columns = 4
       } else {
         sprite.sprite = AssetManager.get('normal-zombie-walking')!
@@ -85,9 +85,9 @@ export class BucketheadZombie extends Zombie {
 
     const eatingFrame = (frame: number) => {
       if (this.hasCone) {
-        sprite.sprite = AssetManager.get('buckethead-zombie-eating')!
+        sprite.sprite = AssetManager.get('conehead-zombie-eating')!
         sprite.frame.x = frame
-        sprite.frame.y = this.bucketHasHalfLife ? 1 : 0
+        sprite.frame.y = this.coneHasHalfLife ? 1 : 0
         sprite.columns = 2
       } else {
         sprite.sprite = AssetManager.get('normal-zombie-eating')!
@@ -142,7 +142,7 @@ export class BucketheadZombie extends Zombie {
   }
 
   hasCone = true
-  bucketHasHalfLife = false
+  coneHasHalfLife = false
   hasHalfLife = false
   state: ZombieState = ZombieState.Walking
   plant: Plant | null = null
@@ -166,7 +166,7 @@ export class BucketheadZombie extends Zombie {
     // Health
     if (
       !this.hasHalfLife &&
-      this.health <= ZOMBIE_DETAILS['buckethead-zombie'].health[1] / 2
+      this.health <= ZOMBIE_DETAILS['conehead-zombie'].health[1] / 2
     ) {
       this.hasHalfLife = true
       const sprite = new Sprite({
@@ -184,11 +184,11 @@ export class BucketheadZombie extends Zombie {
     }
     if (
       this.hasCone &&
-      this.health <= ZOMBIE_DETAILS['buckethead-zombie'].health[1]
+      this.health <= ZOMBIE_DETAILS['conehead-zombie'].health[1]
     ) {
       this.hasCone = false
       const sprite = new Sprite({
-        sprite: AssetManager.get('buckethead-zombie-bucket-broken')!,
+        sprite: AssetManager.get('conehead-zombie-cone-broken')!,
         columns: 10,
       })
       Game.game.addNodeToLayer(
@@ -201,12 +201,12 @@ export class BucketheadZombie extends Zombie {
       )
     }
     if (
-      !this.bucketHasHalfLife &&
+      !this.coneHasHalfLife &&
       this.health <=
-        ZOMBIE_DETAILS['buckethead-zombie'].health[1] +
-          ZOMBIE_DETAILS['buckethead-zombie'].health[0] / 2
+        ZOMBIE_DETAILS['conehead-zombie'].health[1] +
+          ZOMBIE_DETAILS['conehead-zombie'].health[0] / 2
     ) {
-      this.bucketHasHalfLife = true
+      this.coneHasHalfLife = true
     }
 
     super.update(dt)

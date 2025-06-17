@@ -1,7 +1,7 @@
 import Game from '../../ge/game.js'
 import { Node } from '../../ge/nodes/node.js'
 import { Sprite } from '../../ge/nodes/sprite.js'
-import { TemporalAnimation } from '../../ge/nodes/temporalAnimation.js'
+import { TemporalAnimation } from '../../ge/nodes/temporal-animation.js'
 import { animateSprite } from '../../ge/utils/animation.js'
 import { AssetType, createAsset } from '../../ge/utils/asset.js'
 import { Vector } from '../../ge/utils/vector.js'

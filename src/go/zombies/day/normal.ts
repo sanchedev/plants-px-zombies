@@ -4,7 +4,7 @@ import Game from '../../../ge/game.js'
 import { Animator } from '../../../ge/nodes/animator.js'
 import { Collider } from '../../../ge/nodes/collider.js'
 import { Sprite } from '../../../ge/nodes/sprite.js'
-import { TemporalAnimation } from '../../../ge/nodes/temporalAnimation.js'
+import { TemporalAnimation } from '../../../ge/nodes/temporal-animation.js'
 import { animateSprite, Animation } from '../../../ge/utils/animation.js'
 import {
   AssetManager,
@@ -12,7 +12,7 @@ import {
   createAsset,
 } from '../../../ge/utils/asset.js'
 import { Vector } from '../../../ge/utils/vector.js'
-import { getRow, row } from '../../../lib/getRow.js'
+import { getRow, row } from '../../../lib/row.js'
 import { Layers } from '../../../setup/layers.js'
 import { Plant } from '../../plants/plant.js'
 import { Zombie } from '../zombie.js'

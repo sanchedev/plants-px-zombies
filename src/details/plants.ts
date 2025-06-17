@@ -1,4 +1,4 @@
-import { PeaType, SunSize } from './plantsTypes.js'
+import { PeaType, SunSize } from './plants-types.js'
 
 export const PLANT_DETAILS = {
   peashooter: {

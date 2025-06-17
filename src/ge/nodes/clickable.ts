@@ -1,7 +1,7 @@
 import Game from '../game.js'
 import { EvListener } from '../utils/event-listener.js'
 import { Vector } from '../utils/vector.js'
-import { MouseChecker } from './mouseChecker.js'
+import { MouseChecker } from './mouse-checker.js'
 import { Sprite } from './sprite.js'
 import { ClickableEvents, ClickableOptions } from './types.js'
 

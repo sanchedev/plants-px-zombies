@@ -11,7 +11,7 @@ import {
 import { EvListener } from '../../../ge/utils/event-listener.js'
 import { Vector } from '../../../ge/utils/vector.js'
 import { SunCounter } from '../sun-counter.js'
-import { SeedSprite } from './seedSprite.js'
+import { SeedSprite } from './seed-sprite.js'
 
 createAsset(
   'plants/day',
