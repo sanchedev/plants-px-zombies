@@ -7,6 +7,10 @@ export interface GameOptions {
   canvasId: string
   scale?: number
   debug?: boolean
+
+  // Text
+  font?: string
+  fontSize?: number
 }
 
 export default class Game {
@@ -15,7 +19,18 @@ export default class Game {
   scale: number
   debug: boolean
 
-  constructor({ width, height, scale, canvasId, debug }: GameOptions) {
+  font: string
+  fontSize: number
+
+  constructor({
+    width,
+    height,
+    scale,
+    canvasId,
+    debug,
+    font,
+    fontSize,
+  }: GameOptions) {
     this.debug = debug ?? false
 
     this.width = width
@@ -30,6 +45,9 @@ export default class Game {
     this.ctx = this.canvas.getContext('2d')!
 
     Game.game = this
+
+    this.font = font ?? 'sans-serif'
+    this.fontSize = fontSize ?? 16
   }
 
   canvas: HTMLCanvasElement

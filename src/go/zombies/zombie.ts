@@ -2,8 +2,10 @@ import Game from '../../ge/game.js'
 import { Node } from '../../ge/nodes/node.js'
 import { Sprite } from '../../ge/nodes/sprite.js'
 import { TemporalAnimation } from '../../ge/nodes/temporal-animation.js'
+import { NodeEvents } from '../../ge/nodes/types.js'
 import { animateSprite } from '../../ge/utils/animation.js'
 import { AssetType, createAsset } from '../../ge/utils/asset.js'
+import { EvListener } from '../../ge/utils/event-listener.js'
 import { Vector } from '../../ge/utils/vector.js'
 
 const defaultZombieDeadAnimation = createAsset(
@@ -28,9 +30,15 @@ export enum ZombieEffect {
   Frozen = 1,
 }
 
+export interface ZombieEvents extends NodeEvents {
+  healthChanged: (health: number) => void
+}
+
 export abstract class Zombie extends Node {
   abstract health: number
   abstract speed: number
+
+  ev = new EvListener<ZombieEvents>()
 
   effect: ZombieEffect = ZombieEffect.None
 
@@ -45,6 +53,9 @@ export abstract class Zombie extends Node {
 
   damage(damage: number, reason = ReasonToDieOfZombie.Common) {
     this.health -= damage
+
+    this.ev._emit_('healthChanged', Math.max(this.health, 0))
+
     if (this.health > 0) return
 
     switch (reason) {
@@ -67,6 +78,7 @@ export abstract class Zombie extends Node {
     }
 
     this.update(0)
+
     this.destroy()
   }
 

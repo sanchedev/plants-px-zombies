@@ -72,7 +72,7 @@ export class Sunflower extends Plant {
     const sunRate = PLANT_DETAILS.sunflower.sunProduction!.rate / 1000
 
     const timer = new Timer({
-      duration: sunRate / 2,
+      duration: sunRate / 3,
     })
     timer.ev.on('finished', () => {
       timer.duration = sunRate

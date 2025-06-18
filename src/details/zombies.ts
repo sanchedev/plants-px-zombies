@@ -44,3 +44,5 @@ export const ZOMBIE_DETAILS = {
 export const enum ZombieDamages {
   Eat = 100,
 }
+
+export type ZombieNames = keyof typeof ZOMBIE_DETAILS

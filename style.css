@@ -1,0 +1,29 @@
+/* Import font pxplant.woff2 */
+@font-face {
+  font-family: 'pxplant';
+  src: url('/assets/fonts/pxplant.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+body {
+  background-color: #17191d;
+  display: grid;
+  place-items: center;
+  height: 100dvh;
+}
+canvas {
+  image-rendering: pixelated;
+  width: 100vw;
+  height: 100vh;
+  max-width: calc(100vh * 3 / 2);
+  max-height: calc(100vw * 2 / 3);
+}

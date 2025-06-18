@@ -36,7 +36,7 @@ export class SunCounter extends Node {
     const text = new Text({
       text: '',
       textAlign: 'right',
-      position: new Vector(24, 6),
+      position: new Vector(26, 11),
     })
 
     sprite.addChild(text)

@@ -14,8 +14,7 @@ import { BOARD_OFFSET } from './constants.js'
 import { PauseButton } from './go/ui/pause/pause-button.js'
 import { PauseMenu } from './go/ui/pause/pause-menu.js'
 import { Shovel } from './go/ui/shovel.js'
-import { PLANTS } from './go/plants/index.js'
-import { ZOMBIES } from './go/zombies/index.js'
+import { ZombieSpawner } from './go/spawners/zombie-spawner.js'
 
 export async function setup() {
   await AssetManager.load(console.log)
@@ -26,6 +25,8 @@ export async function setup() {
     scale: 4,
     canvasId: 'game',
     debug: false,
+    font: 'pxplant',
+    fontSize: 8,
   })
 
   setupLayers()
@@ -88,6 +89,20 @@ export async function setup() {
   )
 
   Game.game.addNodeToLayer('ui', new PauseMenu({}))
+
+  Game.game.addNodeToLayer(
+    'ui',
+    new ZombieSpawner({
+      waves: [
+        [
+          {
+            zombies: ['zombie'],
+            timeToWaitBetweenSpawns: 1,
+          },
+        ],
+      ],
+    })
+  )
 
   Game.game.start()
 }

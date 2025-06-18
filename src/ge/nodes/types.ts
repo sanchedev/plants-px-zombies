@@ -95,6 +95,8 @@ export interface ClickableOptions extends NodeOptions {
 export interface TextOptions extends NodeOptions {
   text: string
   textAlign?: 'left' | 'center' | 'right'
+  /** @default '#000000' */
+  color?: string
 }
 
 // Events

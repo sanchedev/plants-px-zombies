@@ -4,30 +4,40 @@ import { Vector } from '../utils/vector.js'
 import { Node } from './node.js'
 import { TextOptions } from './types.js'
 
-const charactersTexture = createAsset(
-  'characters',
-  '/assets/sprites/ui/characters.png',
-  AssetType.Image
-)
-const charactersWidth = 3
-const charactersHeight = 5
-const spaceBetweenCharacters = 1
-const characterSpaceWidth = 2
+// const charactersTexture = createAsset(
+//   'characters',
+//   '/assets/sprites/ui/characters.png',
+//   AssetType.Image
+// )
+// const charactersWidth = 3
+// const charactersHeight = 5
+// const spaceBetweenCharacters = 1
+// const characterSpaceWidth = 2
 
 export class Text extends Node {
   text: string
   textAlign: 'left' | 'center' | 'right'
+  color: string
 
   constructor(options: TextOptions) {
     super(options)
 
     this.text = options.text
     this.textAlign = options.textAlign ?? 'left'
+    this.color = options.color ?? '#000000'
   }
 
-  draw(dt: number): void {
+  draw(): void {
     const { x, y } = this.globalPosition
     const { text, textAlign } = this
+
+    Game.game.ctx.font = `${Game.game.fontSize}px ${Game.game.font}`
+    Game.game.ctx.fillStyle = this.color
+    Game.game.ctx.textAlign = textAlign
+
+    Game.game.ctx.fillText(text, x, y)
+
+    /*
     const width = calculateTextWidth(text)
     let xPos = x
     if (textAlign === 'center') {
@@ -62,10 +72,11 @@ export class Text extends Node {
 
       xPos += charWidth
     }
+    */
   }
 }
 
-function calculateTextWidth(text: string) {
+/*function calculateTextWidth(text: string) {
   const characters = text.split('')
   let width = 0
   for (const character of characters) {
@@ -98,3 +109,4 @@ export function getCharPos(character: string) {
   }
   return new Vector(x, 5)
 }
+*/
