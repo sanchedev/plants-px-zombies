@@ -98,6 +98,14 @@ export interface TextOptions extends NodeOptions {
   /** @default '#000000' */
   color?: string
 }
+export interface MonoAudioOptions extends NodeOptions {
+  audio: Asset<AssetType.Audio>
+  autoplay?: boolean
+  loop?: boolean
+}
+export interface MultiAudioOptions extends NodeOptions {
+  audio: Asset<AssetType.Audio> | Asset<AssetType.Audio>[]
+}
 
 // Events
 export interface NodeEvents {
@@ -128,6 +136,12 @@ export interface MouseCheckerEvents extends NodeEvents {
 export interface ClickableEvents extends MouseCheckerEvents {
   click: () => void
   clickOutside: () => void
+}
+export interface MonoAudioEvents extends NodeEvents {
+  played: () => void
+  paused: () => void
+  stopped: () => void
+  ended: () => void
 }
 
 // Nodes

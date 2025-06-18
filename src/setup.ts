@@ -4,6 +4,7 @@ import { AssetManager } from './ge/utils/asset.js'
 import { Vector } from './ge/utils/vector.js'
 import { setupLayers } from './setup/layers.js'
 import './setup/image.js'
+import './setup/audio.js'
 import { SunCounter } from './go/ui/sun-counter.js'
 import { SeedContainer } from './go/ui/seed/seed-container.js'
 import { PLANT_DETAILS } from './details/plants.js'
@@ -15,6 +16,7 @@ import { PauseButton } from './go/ui/pause/pause-button.js'
 import { PauseMenu } from './go/ui/pause/pause-menu.js'
 import { Shovel } from './go/ui/shovel.js'
 import { ZombieSpawner } from './go/spawners/zombie-spawner.js'
+import { MonoAudio } from './ge/nodes/mono-audio.js'
 
 export async function setup() {
   await AssetManager.load(console.log)
@@ -86,6 +88,15 @@ export async function setup() {
   Game.game.addNodeToLayer(
     'background',
     new Sprite({ sprite: AssetManager.get('day-bg')!, scale: 2 })
+  )
+
+  Game.game.addNodeToLayer(
+    'ui',
+    new MonoAudio({
+      audio: AssetManager.get('day-theme')!,
+      autoplay: true,
+      loop: true,
+    })
   )
 
   Game.game.addNodeToLayer('ui', new PauseMenu({}))

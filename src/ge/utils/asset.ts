@@ -28,6 +28,7 @@ export class Asset<T extends AssetType> {
   async load(): Promise<void> {
     await new Promise<void>((resolve, reject) => {
       this.element.onload = () => resolve()
+      this.element.onloadeddata = () => resolve()
       this.element.onerror = () => reject()
       this.element.src = this.path
     })

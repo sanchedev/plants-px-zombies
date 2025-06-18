@@ -1,5 +1,6 @@
 import { TILE_SIZE } from '../../constants.js'
 import { Clickable } from '../../ge/nodes/clickable.js'
+import { MonoAudio } from '../../ge/nodes/mono-audio.js'
 import { Node } from '../../ge/nodes/node.js'
 import { Sprite } from '../../ge/nodes/sprite.js'
 import { Timer } from '../../ge/nodes/timer.js'
@@ -9,6 +10,7 @@ import { Vector } from '../../ge/utils/vector.js'
 import { SunCounter } from './sun-counter.js'
 
 createAsset('sun', '/assets/sprites/ui/sun.png', AssetType.Image)
+createAsset('click-sun', '/assets/audios/points.ogg', AssetType.Audio)
 
 const SUN_SPEED = 0.5
 
@@ -48,7 +50,14 @@ export class Sun extends Node {
 
     this.addChild(clickable)
 
+    const audio = new MonoAudio({
+      audio: AssetManager.get('click-sun')!,
+    })
+
+    this.addChild(audio)
+
     clickable.ev.on('click', () => {
+      audio.play()
       const x = this.globalPosition.x - SunCounter.instance.globalPosition.x
       const y = this.globalPosition.y - SunCounter.instance.globalPosition.y
       if (y < 0) this.oriY = -1
